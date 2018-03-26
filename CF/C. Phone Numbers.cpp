@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#define mp make_pair
 #define pb push_back
 #define p push
 #define ll long long
@@ -14,66 +15,45 @@
 
 using namespace std;
 
-int n,m;
-string name, phone;
-vector< string > vec[30];
-map < string, int > mep;
-map < string, bool > mp;
-vector < string > nama;
-
-
-bool cmp ( string s, string ss){
-	int l = s.length();
-	int lol = ss.length();
-	return l < lol;
-}
+int n,k,ind;
+string ans,s;
+map < char, bool > mep;
+vector < char > vec;
 
 int main(){
-	cin>>n;
-	int hash = 1;
-	for(int i=1; i<=n; i++){
-		cin>>name>>m;
-		if(!mep[name]){
-			mep[name] = hash;
-			hash ++;
-			nama.pb(name);
-		}
-		for(int i=1; i<=m; i++){
-			cin>>phone;
-			vec[mep[name]].pb(phone);		
+	cin>>n>>k;
+	cin>>s;
+	for(int i=0 ; i<n;i++){
+		if(!mep[s[i]]){
+			mep[s[i]] = true;
+			vec.pb(s[i]);
 		}
 	}
-	cout<<nama.size()<<endl;
-	for(int i=0; i<nama.size(); i++){
-		sort(vec[mep[nama[i]]].begin(), vec[mep[nama[i]]].end(), cmp);
-		cout<<nama[i]<<" ";
-		mp.clear();
-		for(int j=0; j<vec[mep[nama[i]]].size(); j++){
-			string s = vec[mep[nama[i]]][j];
-		//	if(nama[i] == "petr")
-		//		cout<<s<<endl;
-			string tmp ="";
-			int x = s.length();
-			for(int ii=x-1;ii>0;ii--){
-				tmp += s[ii];
-				string lol = tmp;
-				reverse(lol.begin(),lol.end());
-				mp[lol] = true;
-				reverse(tmp.begin(), tmp.end());
-			}
-		}
-		vector < string > ans;
-	//	cout<<vec[mep[nama[i]]][0]<<endl;
-		for(int j=0; j<vec[mep[nama[i]]].size(); j++){
-			if(!mp[vec[mep[nama[i]]][j]]){
-				mp[vec[mep[nama[i]]][j]] = true;
-				ans.pb(vec[mep[nama[i]]][j]);
-			}
-		}
-		int idx = ans.size();
-		cout<<ans.size()<<" ";
-		for(int ii=0; ii+1<ans.size(); ii++)
-			cout<<ans[ii]<<" ";
-		cout<<ans[idx-1]<<endl;
+	sort(vec.begin(), vec.end());
+	ans ="";
+	char maks = vec[vec.size()-1];
+	for(int i=0;i<min(k,n);i++){
+		ans += s[i];
 	}
+	if(k > n){
+		for(int i=n;i<k;i++)
+			ans += vec[0];
+	}
+	if(k <= n)
+	for(int i=min(k-1,n-1);i>=0;i--){
+		if(s[i] != maks){
+			for(int j=0; j<vec.size(); j++){
+				if(vec[j] == ans[i]){
+					ind = j;
+					break;
+				}
+			}
+			ans[i] = vec[ind+1];
+			break;
+		}
+		else{
+			ans[i] = vec[0];
+		}
+	}
+	cout<<ans<<endl;
 }
